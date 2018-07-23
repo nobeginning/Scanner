@@ -13,7 +13,7 @@ import android.view.SurfaceHolder
 import android.view.SurfaceView
 import android.view.ViewTreeObserver
 import android.view.WindowManager
-import com.young.scanner.camera.ComptCameraManager
+import com.young.scanner.camera.CompatCameraManager
 import com.young.scanner.camera.IDecodeDelegate
 
 /**
@@ -39,7 +39,7 @@ class ScannerComponent(lifecycleOwner: LifecycleOwner,
     private var decodeSuccess: Boolean = false
 
     private val context: Context = surfaceView.context
-    private val comptCameraManager:ComptCameraManager = ComptCameraManager(context, surfaceView, this)
+    private val compatCameraManager:CompatCameraManager = CompatCameraManager(context, surfaceView, this)
     private val surfaceHolder: SurfaceHolder = surfaceView.holder
     private val decodeProxy: DecodeProxy = DecodeProxy(this, decodeFactory)
 
@@ -130,12 +130,14 @@ class ScannerComponent(lifecycleOwner: LifecycleOwner,
     fun startDecode() {
         if (hasSurfaceHolder && resumed) {
             decodeSuccess = false
-            comptCameraManager.startDecode()
+            compatCameraManager.startDecode()
+            scannerView?.onStartPreview()
         }
     }
 
     fun stopDecode() {
-        comptCameraManager.stopDecode()
+        compatCameraManager.stopDecode()
+        scannerView?.onStopPreview()
     }
 
     override fun surfaceChanged(p0: SurfaceHolder?, p1: Int, p2: Int, p3: Int) {}
@@ -151,6 +153,6 @@ class ScannerComponent(lifecycleOwner: LifecycleOwner,
     }
 
     public fun releaseCamera() {
-        comptCameraManager.releaseCamera()
+        compatCameraManager.releaseCamera()
     }
 }

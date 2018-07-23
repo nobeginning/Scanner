@@ -47,6 +47,10 @@ class DecoderImplZxing : IDecoder {
 //            println("扫码：数组变换耗时：${step1 - step0}")
             val newWidth = height
             val newHeight = width
+            val right = rect.right
+            val bottom = rect.bottom
+            rect.right = bottom
+            rect.bottom = right
 
             val result = realDecode(rotatedData, newWidth, newHeight, rect)
 

@@ -4,7 +4,7 @@ import android.content.Context
 import android.os.Build
 import android.view.SurfaceView
 
-class ComptCameraManager(context: Context, surfaceView: SurfaceView, decodeDelegate: IDecodeDelegate) : ICameraManager {
+class CompatCameraManager(context: Context, surfaceView: SurfaceView, decodeDelegate: IDecodeDelegate) : ICameraManager {
 
     private val cm: ICameraManager by lazy {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {

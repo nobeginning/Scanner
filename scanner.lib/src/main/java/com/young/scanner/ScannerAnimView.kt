@@ -19,7 +19,8 @@ class ScannerAnimView(context: Context?, attrs: AttributeSet?) : View(context, a
     }
 
     override fun getDecodeArea(): Rect {
-        return Rect(finalRectLeft, finalRectTop, finalRectRight, finalRectBottom)
+//        return Rect(finalRectLeft, finalRectTop, finalRectRight, finalRectBottom)
+        return ScannerComponent.RECT_WHOLE_SCREEN
     }
 
     private var finalRectLeft = (context?.screenWidth() ?: 0) / 4
