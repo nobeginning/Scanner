@@ -35,7 +35,7 @@ class ScanActivity : SwipeBackActivity(), DecodeListener {
         tv_close.setOnClickListener {
             finish()
         }
-
+//        scannerComponent = ScannerComponent(this, surface_view, this, scanner_anim_view)
         ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.CAMERA), 10001)
     }
 

@@ -9,10 +9,7 @@ import android.graphics.Point
 import android.graphics.Rect
 import android.os.Handler
 import android.os.Looper
-import android.view.SurfaceHolder
-import android.view.SurfaceView
-import android.view.ViewTreeObserver
-import android.view.WindowManager
+import android.view.*
 import com.young.scanner.camera.CompatCameraManager
 import com.young.scanner.camera.IDecodeDelegate
 
@@ -44,8 +41,10 @@ class ScannerComponent(lifecycleOwner: LifecycleOwner,
     private val decodeProxy: DecodeProxy = DecodeProxy(this, decodeFactory)
 
     init {
-        hasSurfaceHolder = true
+//        hasSurfaceHolder = true
+        surfaceView.visibility = View.GONE
         surfaceHolder.addCallback(this)
+        surfaceView.visibility = View.VISIBLE
         lifecycleOwner.lifecycle.addObserver(object : LifecycleObserver {
             @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
             fun onResume(lifecycleOwner: LifecycleOwner) {
