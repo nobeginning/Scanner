@@ -24,6 +24,7 @@ class CameraManagerV20(val context: Context, surfaceView: SurfaceView, private v
 
     private val surfaceHolder = surfaceView.holder
     private var bestSize: Point? = null
+    private var cameraId = -1
 
     private val autoFocusHandler: Handler = Handler(Looper.getMainLooper()) {
         return@Handler try {
@@ -61,7 +62,24 @@ class CameraManagerV20(val context: Context, surfaceView: SurfaceView, private v
     private fun initCamera() {
         if (camera == null) {
             Thread {
-                camera = Camera.open(0)
+                if (cameraId < 0) {
+                    val cameraCount = Camera.getNumberOfCameras()
+                    if (cameraCount == 0) {
+                        return@Thread
+                    }
+                    for (idx in (0 until cameraCount)) {
+                        val info = Camera.CameraInfo()
+                        Camera.getCameraInfo(idx, info)
+                        if (info.facing == Camera.CameraInfo.CAMERA_FACING_BACK) {
+                            cameraId = idx
+                            break
+                        }
+                    }
+                }
+                if (cameraId < 0) {
+                    return@Thread
+                }
+                camera = Camera.open(cameraId)
                 val parameters = camera!!.parameters
                 val supportedPreviewSizes = parameters.supportedPreviewSizes
                 val manager = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager?
