@@ -15,7 +15,12 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-        <com.young.scanner.ScannerAnimView
+        <!--<com.young.scanner.ScannerAnimView-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:id="@+id/scanner_anim_view"/>-->
+
+        <com.young.sample.scanner.ScannerAnimView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/scanner_anim_view"/>

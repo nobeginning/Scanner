@@ -4,8 +4,12 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.support.v4.app.ActivityCompat
+import android.widget.Toast
 import com.young.scanner.DecodeListener
 import com.young.scanner.ScannerComponent
 import com.young.scanner.ScannerConfiguration
@@ -17,8 +21,14 @@ class ScanActivity : SwipeBackActivity(), DecodeListener {
 
     override fun onDecode(result: String) {
         println("Result: $result")
-        ScanResultActivity.launch(this@ScanActivity, result)
-//        ScanActivity.launch(this)
+        if (result.startsWith("http")) {    //模拟一下错误的情况
+            Toast.makeText(this, "HA HA, CUO LE BA", Toast.LENGTH_LONG).show()
+            Handler(Looper.getMainLooper()).postDelayed({
+                scannerComponent?.startDecode()
+            }, 1000)
+        } else {
+            ScanResultActivity.launch(this@ScanActivity, result)
+        }
     }
 
     companion object {
@@ -27,7 +37,7 @@ class ScanActivity : SwipeBackActivity(), DecodeListener {
         }
     }
 
-    var scannerComponent: ScannerComponent? = null
+    private var scannerComponent: ScannerComponent? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         ScannerConfiguration.decodeFactory = DecodeFactoryZxing()
@@ -35,8 +45,11 @@ class ScanActivity : SwipeBackActivity(), DecodeListener {
         tv_close.setOnClickListener {
             finish()
         }
-//        scannerComponent = ScannerComponent(this, surface_view, this, scanner_anim_view)
-        ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.CAMERA), 10001)
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            scannerComponent = ScannerComponent(this, surface_view, this, scanner_anim_view)
+        } else {
+            ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.CAMERA), 10001)
+        }
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
@@ -51,8 +64,6 @@ class ScanActivity : SwipeBackActivity(), DecodeListener {
     override fun onResume() {
         println("Scanner : ScanActivity onResume")
         super.onResume()
-//        scannerComponent?.onStart(this)
-//        scannerComponent?.startDecode()
     }
 
     override fun onStart() {
@@ -63,8 +74,6 @@ class ScanActivity : SwipeBackActivity(), DecodeListener {
     override fun onPause() {
         println("Scanner : ScanActivity onPause")
         super.onPause()
-//        scannerComponent?.onStop(this)
-//        scannerComponent?.stopDecode()
     }
 
     override fun onStop() {
@@ -75,6 +84,5 @@ class ScanActivity : SwipeBackActivity(), DecodeListener {
     override fun onDestroy() {
         println("Scanner : ScanActivity onDestroy")
         super.onDestroy()
-//        scannerComponent?.onDestroy(this)
     }
 }

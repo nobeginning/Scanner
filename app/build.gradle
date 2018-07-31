@@ -33,4 +33,6 @@ dependencies {
     implementation 'me.imid.swipebacklayout.lib:library:1.1.0'
     implementation project(':scanner.lib')
     implementation project(':scanner.lib.zxing')
+//    implementation 'com.github.nobeginning.Scanner:scanner.lib:v0.1.1'
+//    implementation 'com.github.nobeginning.Scanner:scanner.lib.zxing:v0.1.1'
 }

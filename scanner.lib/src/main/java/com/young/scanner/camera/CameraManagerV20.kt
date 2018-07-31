@@ -14,7 +14,7 @@ import android.view.WindowManager
 import java.util.*
 
 @TargetApi(Build.VERSION_CODES.KITKAT_WATCH)
-class CameraManagerV20(val context: Context, surfaceView: SurfaceView, private val decodeDelegate: IDecodeDelegate) : ICameraManager {
+class CameraManagerV20(private val context: Context, surfaceView: SurfaceView, private val decodeDelegate: IDecodeDelegate) : ICameraManager {
 
     private val msgTypeAutoFocus = 0x01
 
@@ -103,11 +103,14 @@ class CameraManagerV20(val context: Context, surfaceView: SurfaceView, private v
                 camera!!.setPreviewDisplay(surfaceHolder)
                 camera!!.parameters = parameters
 
-                camera!!.setDisplayOrientation(90)
                 camera!!.setPreviewCallback(previewCallback)
                 camera!!.startPreview()
+                camera!!.setDisplayOrientation(90)
                 autoFocus(camera!!)
             }.start()
+        } else {
+            camera!!.setPreviewCallback(previewCallback)
+            camera!!.startPreview()
         }
     }
 
