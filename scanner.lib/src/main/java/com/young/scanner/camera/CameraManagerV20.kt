@@ -111,6 +111,7 @@ class CameraManagerV20(private val context: Context, surfaceView: SurfaceView, p
         } else {
             camera!!.setPreviewCallback(previewCallback)
             camera!!.startPreview()
+            autoFocus(camera!!)
         }
     }
 
