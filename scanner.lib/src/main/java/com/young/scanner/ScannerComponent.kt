@@ -19,6 +19,7 @@ import com.young.scanner.camera.IDecodeDelegate
 class ScannerComponent(lifecycleOwner: LifecycleOwner,
                        private val surfaceView: SurfaceView,
                        private val decodeListener: DecodeListener,
+                       cameraStatusCallback: CameraStatusCallback? = null,
                        private val scannerView: IScannerView? = null,
                        private val disposable: Boolean? = null,
                        decodeFactory: IDecoderFactory? = null) :
@@ -26,6 +27,7 @@ class ScannerComponent(lifecycleOwner: LifecycleOwner,
 
     companion object {
         val RECT_WHOLE_SCREEN = Rect(-1, -1, -1, -1)
+        var DURATION_AUTO_FOCUS = 1800L
     }
 
     private val screenSize: Point = Point()
@@ -36,7 +38,7 @@ class ScannerComponent(lifecycleOwner: LifecycleOwner,
     private var decodeSuccess: Boolean = false
 
     private val context: Context = surfaceView.context
-    private val compatCameraManager:CompatCameraManager = CompatCameraManager(context, surfaceView, this)
+    private val compatCameraManager: CompatCameraManager = CompatCameraManager(context, surfaceView, this, cameraStatusCallback)
     private val surfaceHolder: SurfaceHolder = surfaceView.holder
     private val decodeProxy: DecodeProxy = DecodeProxy(this, decodeFactory)
 
@@ -70,7 +72,7 @@ class ScannerComponent(lifecycleOwner: LifecycleOwner,
         val wm: WindowManager = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
         wm.defaultDisplay.getSize(screenSize)
 
-        surfaceView.viewTreeObserver.addOnPreDrawListener(object :ViewTreeObserver.OnPreDrawListener{
+        surfaceView.viewTreeObserver.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
             override fun onPreDraw(): Boolean {
                 screenSize.x = surfaceView.width
                 screenSize.y = surfaceView.height

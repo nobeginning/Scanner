@@ -10,6 +10,7 @@ import android.os.Handler
 import android.os.Looper
 import android.support.v4.app.ActivityCompat
 import android.widget.Toast
+import com.young.scanner.CameraStatusCallback
 import com.young.scanner.DecodeListener
 import com.young.scanner.ScannerComponent
 import com.young.scanner.ScannerConfiguration
@@ -17,7 +18,10 @@ import com.young.scanner.zxing.DecodeFactoryZxing
 import kotlinx.android.synthetic.main.activity_scan.*
 import me.imid.swipebacklayout.lib.app.SwipeBackActivity
 
-class ScanActivity : SwipeBackActivity(), DecodeListener {
+class ScanActivity : SwipeBackActivity(), DecodeListener, CameraStatusCallback {
+    override fun onCameraOpenFailed() {
+        Toast.makeText(this, "ScanActivity -> onCameraOpenFailed -> do some toast", Toast.LENGTH_LONG).show()
+    }
 
     override fun onDecode(result: String) {
         println("Result: $result")
@@ -46,7 +50,7 @@ class ScanActivity : SwipeBackActivity(), DecodeListener {
             finish()
         }
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            scannerComponent = ScannerComponent(this, surface_view, this, scanner_anim_view)
+            scannerComponent = ScannerComponent(this, surface_view, this, this, scanner_anim_view)
         } else {
             ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.CAMERA), 10001)
         }
@@ -56,7 +60,7 @@ class ScanActivity : SwipeBackActivity(), DecodeListener {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == 10001) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                scannerComponent = ScannerComponent(this, surface_view, this, scanner_anim_view)
+                scannerComponent = ScannerComponent(this, surface_view, this, this, scanner_anim_view)
             }
         }
     }

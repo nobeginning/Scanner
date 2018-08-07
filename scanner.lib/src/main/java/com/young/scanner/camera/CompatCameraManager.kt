@@ -3,14 +3,18 @@ package com.young.scanner.camera
 import android.content.Context
 import android.os.Build
 import android.view.SurfaceView
+import com.young.scanner.CameraStatusCallback
 
-class CompatCameraManager(context: Context, surfaceView: SurfaceView, decodeDelegate: IDecodeDelegate) : ICameraManager {
+class CompatCameraManager(context: Context,
+                          surfaceView: SurfaceView,
+                          decodeDelegate: IDecodeDelegate,
+                          cameraStatusCallback: CameraStatusCallback? = null) : ICameraManager {
 
     private val cm: ICameraManager by lazy {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            CameraManagerV20(context, surfaceView, decodeDelegate)
-        }else {
-            CameraManagerV20(context, surfaceView, decodeDelegate)
+            CameraManagerV20(context, surfaceView, decodeDelegate, cameraStatusCallback)
+        } else {
+            CameraManagerV20(context, surfaceView, decodeDelegate, cameraStatusCallback)
         }
     }
 
