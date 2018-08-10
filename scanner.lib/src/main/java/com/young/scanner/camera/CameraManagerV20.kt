@@ -19,7 +19,7 @@ import java.util.*
 class CameraManagerV20(private val context: Context,
                        surfaceView: SurfaceView,
                        private val decodeDelegate: IDecodeDelegate,
-                       private val cameraStatusCallback: CameraStatusCallback?=null) : ICameraManager {
+                       private val cameraStatusCallback: CameraStatusCallback? = null) : ICameraManager {
 
     private val msgTypeAutoFocus = 0x01
 
@@ -49,18 +49,22 @@ class CameraManagerV20(private val context: Context,
     }
 
     private val previewCallback = Camera.PreviewCallback { bytes, camera ->
-        if (camera != null) {
-            if (readyToDecode) {
-                val parameters = camera.parameters
-                if (parameters != null) {
-                    val si = parameters.previewSize
-                    if (bytes != null && si != null) {
-                        decodeDelegate.decode(bytes, si.width, si.height)
+        try {
+            if (camera != null) {
+                if (readyToDecode) {
+                    val parameters = camera.parameters
+                    if (parameters != null) {
+                        val si = parameters.previewSize
+                        if (bytes != null && si != null) {
+                            decodeDelegate.decode(bytes, si.width, si.height)
+                        }
                     }
+                } else {
+                    camera.stopPreview()
                 }
-            } else {
-                camera.stopPreview()
             }
+        } catch (e: Exception) {
+            //Something wrong when preview
         }
     }
 
